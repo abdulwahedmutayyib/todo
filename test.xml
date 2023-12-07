@@ -1,6 +1,4 @@
-import unittest
-import tkinter as tk
-from tkinter import messagebox
+ox
 
 class TestToDoAppFunctions(unittest.TestCase):
     def test_add_task(self):
@@ -35,5 +33,5 @@ if __name__ == '__main__':
     if result.wasSuccessful():
         print("All tests passed!")
     else:
-        print("Some tests failed. Check the test report for details.")
+
 
