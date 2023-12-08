@@ -1,40 +1,87 @@
 import tkinter as tk
 from tkinter import messagebox
 
-# Create the main window
-app = tk.Tk()
-app.title("To-Do List App")
+TODO_FILE = "todo.txt"
+COMPLETED_FILE = "completed.txt"
 
-# Create the task entry and buttons
-entry = tk.Entry(app, width=40)
-add_button = tk.Button(app, text="Add Task", command=add_task)
-delete_button = tk.Button(app, text="Delete Task", command=delete_task)
-completed_button = tk.Button(app, text="Mark as Completed", command=mark_as_completed)
-clear_button = tk.Button(app, text="Clear Completed", command=clear_completed_tasks)
+class ToDoApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("To-Do App")
 
-# Create the task listbox
-listbox = tk.Listbox(app, selectmode=tk.SINGLE, height=10, width=40)
-listbox_completed = tk.Listbox(app, selectmode=tk.SINGLE, height=5, width=40)
+        self.initialize_files()
 
-# Label to display task counts
-task_count_label = tk.Label(app, text="Total Tasks: 0")
-completed_count_label = tk.Label(app, text="Completed Tasks: 0")
+        self.entry = tk.Entry(master, width=40)
+        self.entry.pack(pady=10)
 
-# Place widgets in the window
-entry.pack(pady=10)
-add_button.pack(pady=5)
-delete_button.pack(pady=5)
-completed_button.pack(pady=5)
-clear_button.pack(pady=5)
-listbox.pack(pady=10)
-listbox_completed.pack(pady=10)
-task_count_label.pack()
-completed_count_label.pack()
+        self.add_button = tk.Button(master, text="Add Task", command=self.add_task)
+        self.add_button.pack(pady=5)
 
-# Update task counts
-listbox.trace_add("w", lambda *args: update_task_counts())
-listbox_completed.trace_add("w", lambda *args: update_task_counts())
+        self.list_button = tk.Button(master, text="List Tasks", command=self.list_tasks)
+        self.list_button.pack(pady=5)
 
-# Start the main loop
-app.mainloop()
+        self.mark_button = tk.Button(master, text="Mark as Completed", command=self.mark_as_completed)
+        self.mark_button.pack(pady=5)
 
+        self.clear_button = tk.Button(master, text="Clear Completed", command=self.clear_completed_tasks)
+        self.clear_button.pack(pady=5)
+
+    def initialize_files(self):
+        if not tk.StringVar(TODO_FILE).get():
+            with open(TODO_FILE, "w"):
+                pass
+
+        if not tk.StringVar(COMPLETED_FILE).get():
+            with open(COMPLETED_FILE, "w"):
+                pass
+
+    def add_task(self):
+        task = self.entry.get()
+        if task:
+            with open(TODO_FILE, "a") as file:
+                file.write(task + "\n")
+            messagebox.showinfo("Success", "Task added successfully.")
+            self.entry.delete(0, tk.END)
+        else:
+            messagebox.showwarning("Warning", "Please enter a task.")
+
+    def list_tasks(self):
+        with open(TODO_FILE, "r") as file:
+            tasks = file.readlines()
+            if tasks:
+                task_list = "\n".join(tasks)
+                messagebox.showinfo("To-Do List", f"To-Do List:\n{task_list}")
+            else:
+                messagebox.showinfo("To-Do List", "No tasks in the To-Do list.")
+
+    def mark_as_completed(self):
+        with open(TODO_FILE, "r") as file:
+            tasks = file.readlines()
+
+        if tasks:
+            selected_task = messagebox.askinteger("Mark as Completed", "Enter the index of the task to mark as completed:")
+            if selected_task and 1 <= selected_task <= len(tasks):
+                completed_task = tasks.pop(selected_task - 1)
+                with open(TODO_FILE, "w") as file:
+                    file.writelines(tasks)
+
+                with open(COMPLETED_FILE, "a") as file:
+                    file.write(completed_task)
+                messagebox.showinfo("Success", f"Marked task as completed: {completed_task.strip()}")
+            else:
+                messagebox.showwarning("Warning", "Invalid task index.")
+        else:
+            messagebox.showinfo("To-Do List", "No tasks in the To-Do list.")
+
+    def clear_completed_tasks(self):
+        with open(COMPLETED_FILE, "w"):
+            pass
+        messagebox.showinfo("Success", "Cleared completed tasks.")
+
+def main():
+    root = tk.Tk()
+    app = ToDoApp(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
