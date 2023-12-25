@@ -1,6 +1,4 @@
-# requirements.txt
-...
+
 pypiwin32>=306
-...
 win10toast==0.9
 pyttsx3==2.90
