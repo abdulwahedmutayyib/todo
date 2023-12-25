@@ -1,4 +1,3 @@
-
 # Use an official Python runtime as a parent image
 FROM python:3.8-slim
 
@@ -15,8 +14,7 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 80
 
 # Define environment variable
-ENV NAME World
+ENV NAME=World
 
 # Run the script when the container launches
-CMD ["python", "./to-do.py"]
-
+CMD ["python", "to-do.py"]
