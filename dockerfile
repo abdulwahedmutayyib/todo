@@ -1,18 +1,19 @@
 # Use an official Ubuntu runtime as a parent image
 FROM ubuntu:latest
 
-# Set the working directory to /app
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip espeak libespeak1 && \
+    pip3 install win10toast pyttsx3
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Install required dependencies
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    apt-get install -y espeak libespeak1 && \
-    pip3 install --upgrade setuptools && \
-    pip3 install win10toast pyttsx3 pypiwin32==218
-
-# Copy the local code into the container at /app
+# Copy the current directory contents into the container at /app
 COPY . /app
 
-# Run the Python script
-CMD ["python3", "to-do.py"]
+# Make port 80 available to the world outside this container
+# EXPOSE 80
+
+# Run app.py when the container launches
+CMD ["python3", "your_script_name.py"]
