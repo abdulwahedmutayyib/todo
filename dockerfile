@@ -5,9 +5,11 @@ FROM ubuntu:latest
 WORKDIR /app
 
 # Install any necessary dependencies
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    apt-get install -y espeak libespeak1 && \
+RUN apt-get update -y
+    apt-get upgrade -y 
+    apt-get install -y python3
+    apt-get install -y python3-pip
+    apt-get install -y espeak libespeak1 
     pip3 install win10toast pyttsx3
 
 # Copy the current directory contents into the container at /app
