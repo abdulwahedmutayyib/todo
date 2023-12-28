@@ -1,22 +1,19 @@
-
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
+# Use an official Ubuntu runtime as a parent image
+FROM ubuntu:latest
 
 # Set the working directory to /app
 WORKDIR /app
 
+# Install any necessary dependencies
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get install -y espeak libespeak1 && \
+    pip3 install win10toast pyttsx3
+
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Run app.py when the container launches
+CMD ["python3", "to-do.py"]
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
-
-# Define environment variable
-ENV NAME World
-
-# Run the script when the container launches
-CMD ["python", "./to-do.py"]
 
