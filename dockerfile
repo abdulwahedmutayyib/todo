@@ -15,4 +15,4 @@ RUN apt-get update && \
 COPY . /app
 
 # Run the Python script
-CMD ["python3", "your_script_name.py"]
+CMD ["python3", "to-do.py"]
