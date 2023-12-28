@@ -6,7 +6,6 @@ WORKDIR /app
 
 # Install any necessary dependencies
 RUN apt-get update -y
-    apt-get upgrade -y 
     apt-get install -y python3
     apt-get install -y python3-pip
     apt-get install -y espeak libespeak1 
