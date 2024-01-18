@@ -1,5 +1,5 @@
 # Use the official Windows Server Core image
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM PowerShell
 
 # Set the working directory in the container
 WORKDIR C:\app
