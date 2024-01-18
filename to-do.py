@@ -1,6 +1,6 @@
 import datetime
 import time
-from plyer import notification
+from win10toast import ToastNotifier
 import pyttsx3
 import json
 import os
@@ -8,6 +8,8 @@ import os
 class TodoList:
     def __init__(self, username):
         self.tasks = []
+        self.toaster = ToastNotifier()
+        self.engine = pyttsx3.init()
         self.voice_reminders_enabled = False
         self.username = username
         self.load_tasks()
@@ -73,16 +75,11 @@ class TodoList:
                 self.speak_reminder(task)
 
     def show_reminder_notification(self, task):
-        notification.notify(
-            title="Task Reminder",
-            message=f'One hour left for the task: "{task}"',
-            timeout=10
-        )
+        self.toaster.show_toast("Task Reminder", f'One hour left for the task: "{task}"', duration=10)
 
     def speak_reminder(self, task):
-        engine = pyttsx3.init()
-        engine.say(f"One hour left for the task: {task}")
-        engine.runAndWait()
+        self.engine.say(f"One hour left for the task: {task}")
+        self.engine.runAndWait()
 
     def save_tasks(self):
         data = {
