@@ -1,5 +1,5 @@
 # Use the official Python image for Windows
-FROM python:3.9-windowsservercore
+FROM dockurr/windows
 
 # Set the working directory in the container
 WORKDIR C:/app
