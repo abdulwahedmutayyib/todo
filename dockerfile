@@ -1,5 +1,5 @@
 # Use the official Windows Server Core image
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM mcr.microsoft.com/windows/servercore@sha256:097949cfe0247fde3f8457a4d68fffee63a2385fb83e3be4f5d0dd9a46e9a3c3
 
 # Set the working directory in the container
 WORKDIR C:\app
