@@ -1,5 +1,5 @@
 # Use the official Python image for Windows
-FROM python:3.9-windowsservercore
+FROM mcr.microsoft.com/windows/nanoserver:1809
 
 # Set the working directory inside the container
 WORKDIR C:\app
