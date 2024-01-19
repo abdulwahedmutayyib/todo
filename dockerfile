@@ -1,18 +1,14 @@
-# Use the official Windows Server Core image
-FROM PowerShell
+# Use the official Python image for Windows
+FROM python:3.9-windowsservercore
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR C:\app
 
-# Download and install Python
-RUN Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.9.7/python-3.9.7.exe -OutFile python.exe ; \
-    Start-Process -Wait -FilePath .\python.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1'
+# Copy the local code to the container
+COPY . .
 
-# Verify Python installation
-RUN python --version
+# Install required dependencies
+RUN pip install pywin32 pyttsx3 pypiwin32 win10toast
 
-# Copy your Python script into the container
-COPY to-do.py .
-
-# Set the command to run your Python script
-CMD ["python", "to-do.py"]
+# CMD to run the Python script
+CMD ["python", "your_script_name.py"]
