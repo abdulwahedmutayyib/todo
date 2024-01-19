@@ -11,4 +11,4 @@ COPY . .
 RUN pip install pywin32 pyttsx3 pypiwin32 win10toast
 
 # CMD to run the Python script
-CMD ["python", "your_script_name.py"]
+CMD ["python", "to-do.py"]
