@@ -1,5 +1,6 @@
 # Use the official Python image for Windows
-FROM mcr.microsoft.com/windows/servercore:latest
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
 
 # Set the working directory inside the container
 WORKDIR C:\app
