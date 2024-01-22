@@ -9,9 +9,8 @@ services:
     restart: always
     version: "3.8"
 
-services:
   my-service:
-    image: mcr.microsoft.com/windows/nanoserver:1809
+    image: mcr.microsoft.com/windows/nanoserver:2022
 
 registries:
   mcr:
@@ -19,5 +18,3 @@ registries:
     auth:
       username: "<awm>"
       password: "<awm@12345>"
-
-
