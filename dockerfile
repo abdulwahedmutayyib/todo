@@ -1,5 +1,5 @@
 # Use the official Python image for Windows
-FROM microsoft/iis:latest
+FROM windowsimagemicrosoft/sdk-3.5-windowsservercore-ltsc2019
 
 
 # Set the working directory inside the container
