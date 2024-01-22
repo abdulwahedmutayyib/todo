@@ -7,4 +7,17 @@ services:
     ports:
       - "5000:5000"
     restart: always
+    version: "3.8"
+
+services:
+  my-service:
+    image: mcr.microsoft.com/windows/nanoserver:1809
+
+registries:
+  mcr:
+    url: https://mcr.microsoft.com
+    auth:
+      username: "<awm>"
+      password: "<awm@12345>"
+
 
