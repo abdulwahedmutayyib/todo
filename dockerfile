@@ -1,15 +1,15 @@
-# Use the official Python image for Windows
-FROM windowsimagemicrosoft/sdk-3.5-windowsservercore-ltsc2019
+# Use a compatible Windows image
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
+# Set working directory
+WORKDIR C:/app
 
-# Set the working directory inside the container
-WORKDIR C:\app
-
-# Copy the local code to the container
+# Copy code and requirements file
 COPY . .
 
-# Install required dependencies
-RUN pip install pywin32 pyttsx3 pypiwin32 win10toast
+# Install dependencies from requirements.txt
+RUN python -m pip install --upgrade pip  # Ensure latest pip
+RUN pip install -r requirements.txt
 
-# CMD to run the Python script
+# Specify default command
 CMD ["python", "to-do.py"]
