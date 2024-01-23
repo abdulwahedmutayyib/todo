@@ -1,5 +1,5 @@
 # Use a compatible Windows image
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM mcr.microsoft.com/windows/servercore:ltsc2022-amd64
 
 # Set working directory
 WORKDIR C:/app
