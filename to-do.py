@@ -1,87 +1,105 @@
-import tkinter as tk
-from tkinter import messagebox
-from datetime import datetime, timedelta
-import pyttsx3
 import json
+from datetime import datetime, timedelta
 
 class ToDoApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("To-Do App")
-        self.username = None
+    def __init__(self):
         self.tasks = []
-        self.load_user_data()
-        self.create_widgets()
 
-    def create_widgets(self):
-        if not self.username:
-            self.show_login_page()
-        else:
-            self.show_main_page()
+    def display_menu(self):
+        print("\n===== To-Do App Menu =====")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task as Completed")
+        print("4. Remove Task")
+        print("5. Exit")
 
-    def show_login_page(self):
-        self.login_frame = tk.Frame(self.root)
-        self.login_frame.pack()
+    def add_task(self):
+        task_name = input("Enter task name: ")
+        due_date_str = input("Enter due date (YYYY-MM-DD HH:MM): ")
 
-        tk.Label(self.login_frame, text="Username:").grid(row=0, column=0, pady=10)
-        self.username_entry = tk.Entry(self.login_frame)
-        self.username_entry.grid(row=0, column=1, pady=10)
-
-        tk.Label(self.login_frame, text="Password:").grid(row=1, column=0, pady=10)
-        self.password_entry = tk.Entry(self.login_frame, show="*")
-        self.password_entry.grid(row=1, column=1, pady=10)
-
-        login_button = tk.Button(self.login_frame, text="Login", command=self.login)
-        login_button.grid(row=2, column=1, pady=10)
-
-    def login(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-
-        # Validate username and password (you may implement more secure methods)
-        if self.validate_credentials(username, password):
-            self.username = username
-            self.save_user_data()
-            self.login_frame.destroy()
-            self.show_main_page()
-        else:
-            messagebox.showerror("Error", "Invalid credentials")
-
-    def validate_credentials(self, username, password):
-        # Implement your authentication logic here
-        # For simplicity, check if the username is not empty
-        return bool(username)
-
-    def show_main_page(self):
-        self.main_frame = tk.Frame(self.root)
-        self.main_frame.pack()
-
-        tk.Label(self.main_frame, text=f"Welcome, {self.username}!").grid(row=0, column=0, columnspan=4, pady=10)
-
-        # Rest of the code remains the same
-
-    # Rest of the methods remain the same
-
-    def save_user_data(self):
-        user_data = {"username": self.username, "tasks": self.tasks}
-        with open(f"{self.username}_data.json", "w") as file:
-            json.dump(user_data, file)
-
-    def load_user_data(self):
         try:
-            with open(f"{self.username}_data.json", "r") as file:
-                user_data = json.load(file)
-                self.username = user_data["username"]
-                self.tasks = user_data["tasks"]
+            due_date = datetime.strptime(due_date_str, "%Y-%m-%d %H:%M")
+        except ValueError:
+            print("Invalid date format. Please use YYYY-MM-DD HH:MM.")
+            return
+
+        self.tasks.append({"name": task_name, "due_date": due_date, "completed": False})
+        print("Task added successfully!")
+
+    def view_tasks(self):
+        if not self.tasks:
+            print("No tasks available.")
+            return
+
+        print("\n===== Tasks =====")
+        for i, task in enumerate(self.tasks, start=1):
+            status = "Done" if task["completed"] else "Pending"
+            print(f"{i}. {task['name']} - Due: {task['due_date']} - Status: {status}")
+
+    def mark_as_completed(self):
+        self.view_tasks()
+
+        try:
+            task_index = int(input("Enter the task number to mark as completed: ")) - 1
+            if 0 <= task_index < len(self.tasks):
+                self.tasks[task_index]["completed"] = True
+                print("Task marked as completed!")
+            else:
+                print("Invalid task number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    def remove_task(self):
+        self.view_tasks()
+
+        try:
+            task_index = int(input("Enter the task number to remove: ")) - 1
+            if 0 <= task_index < len(self.tasks):
+                del self.tasks[task_index]
+                print("Task removed successfully!")
+            else:
+                print("Invalid task number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    def save_data(self):
+        with open("tasks.json", "w") as file:
+            json.dump(self.tasks, file)
+
+    def load_data(self):
+        try:
+            with open("tasks.json", "r") as file:
+                self.tasks = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
-            # Handle file not found or invalid JSON gracefully
             pass
 
-# Create the main window
-root = tk.Tk()
+    def run(self):
+        self.load_data()
 
-# Create the ToDoApp instance
-app = ToDoApp(root)
+        while True:
+            self.display_menu()
 
-# Run the Tkinter main loop
-root.mainloop()
+            try:
+                choice = int(input("Enter your choice (1-5): "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+
+            if choice == 1:
+                self.add_task()
+            elif choice == 2:
+                self.view_tasks()
+            elif choice == 3:
+                self.mark_as_completed()
+            elif choice == 4:
+                self.remove_task()
+            elif choice == 5:
+                self.save_data()
+                print("Exiting. Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 5.")
+
+if __name__ == "__main__":
+    todo_app = ToDoApp()
+    todo_app.run()
