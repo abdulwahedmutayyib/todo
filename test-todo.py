@@ -1,51 +1,44 @@
 import unittest
-import tkinter as tk
-from tkinter import Entry, Listbox
-
-from to-do.py import ToDoApp  # Replace with the actual filename
+import json
+from datetime import datetime, timedelta
 
 class TestToDoApp(unittest.TestCase):
     def setUp(self):
-        self.root = tk.Tk()
-        self.app = ToDoApp(self.root)
-        self.app.username = "testuser"
-        self.app.show_main_page()
-
-    def tearDown(self):
-        self.root.destroy()
+        self.todo_app = ToDoApp()
 
     def test_add_task(self):
-        task_entry = self.app.task_entry
-        task_listbox = self.app.task_listbox
+        self.todo_app.add_task()
+        self.assertGreater(len(self.todo_app.tasks), 0)
 
-        task_entry.insert(0, "Test Task")
-        self.app.add_task()
+    def test_view_tasks(self):
+        self.todo_app.add_task()
+        self.todo_app.view_tasks()
+        self.assertGreater(len(self.todo_app.tasks), 0)
 
-        self.assertEqual(task_listbox.get(0), "1. Test Task - Due: - Pending")
+    def test_mark_as_completed(self):
+        self.todo_app.add_task()
+        self.todo_app.mark_as_completed()
+        self.assertTrue(self.todo_app.tasks[0]["completed"])
 
     def test_remove_task(self):
-        task_entry = self.app.task_entry
-        task_listbox = self.app.task_listbox
+        self.todo_app.add_task()
+        self.todo_app.remove_task()
+        self.assertLess(len(self.todo_app.tasks), 1)
 
-        task_entry.insert(0, "Test Task")
-        self.app.add_task()
+    def test_save_data(self):
+        self.todo_app.add_task()
+        self.todo_app.save_data()
+        with open("tasks.json", "r") as file:
+            tasks = json.load(file)
+        self.assertGreater(len(tasks), 0)
 
-        task_listbox.select_set(0)
-        self.app.remove_task()
-
-        self.assertEqual(task_listbox.size(), 0)
-
-    def test_mark_as_done(self):
-        task_entry = self.app.task_entry
-        task_listbox = self.app.task_listbox
-
-        task_entry.insert(0, "Test Task")
-        self.app.add_task()
-
-        task_listbox.select_set(0)
-        self.app.mark_as_done()
-
-        self.assertEqual(task_listbox.get(0), "1. Test Task - Due: - Done")
+    def test_load_data(self):
+        tasks = [{"name": "Task 1", "due_date": datetime.now(), "completed": False}]
+        with open("tasks.json", "w") as file:
+            json.dump(tasks, file)
+        self.todo_app = ToDoApp()
+        self.todo_app.load_data()
+        self.assertEqual(self.todo_app.tasks, tasks)
 
 if __name__ == "__main__":
     unittest.main()
