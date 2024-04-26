@@ -10,7 +10,7 @@ class TestToDoApp(unittest.TestCase):
         self.app.add_task("Test Task", datetime.now() + timedelta(days=1))
         self.assertEqual(len(self.app.tasks), 1)
         self.assertEqual(self.app.tasks[0]["name"], "Test Task")
-        self.assertEqual(self.app.tasks[0]["due_date"], datetime.now() + timedelta(days=1))
+        self.assertEqual(self.app.tasks[0]["due_date"], (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d %H:%M"))
         self.assertFalse(self.app.tasks[0]["completed"])
 
     def test_view_tasks(self):
@@ -41,22 +41,27 @@ class TestToDoApp(unittest.TestCase):
             tasks = json.load(file)
         self.assertEqual(len(tasks), 2)
         self.assertEqual(tasks[0]["name"], "Test Task 1")
-        self.assertEqual(tasks[0]["due_date"], self.app.tasks[0]["due_date"].isoformat())
+        self.assertEqual(tasks[0]["due_date"], (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d %H:%M"))
         self.assertFalse(tasks[0]["completed"])
         self.assertEqual(tasks[1]["name"], "Test Task 2")
-        self.assertEqual(tasks[1]["due_date"], self.app.tasks[1]["due_date"].isoformat())
+        self.assertEqual(tasks[1]["due_date"], (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d %H:%M"))
         self.assertFalse(tasks[1]["completed"])
 
     def test_load_data(self):
         tasks = [
-            {"name": "Test Task 1", "due_date": (datetime.now() + timedelta(days=1)).isoformat(), "completed": False},
-            {"name": "Test Task 2", "due_date": (datetime.now() + timedelta(days=2)).isoformat(), "completed": False}
+            {"name": "Test Task 1", "due_date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d %H:%M"), "completed": False},
+            {"name": "Test Task 2", "due_date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d %H:%M"), "completed": False}
         ]
         with open("tasks.json", "w") as file:
             json.dump(tasks, file)
         self.app = ToDoApp()
         self.assertEqual(len(self.app.tasks), 2)
         self.assertEqual(self.app.tasks[0]["name"], "Test Task 1")
-        self.assertEqual(self.app.tasks[0]["due_date"], datetime.fromisoformat(tasks[0]["due_date"]))
+        self.assertEqual(self.app.tasks[0]["due_date"], tasks[0]["due_date"])
         self.assertFalse(self.app.tasks[0]["completed"])
-        self.assertEqual(self.app.tasks[1]["
+        self.assertEqual(self.app.tasks[1]["name"], "Test Task 2")
+        self.assertEqual(self.app.tasks[1]["due_date"], tasks[1]["due_date"])
+        self.assertFalse(self.app.tasks[1]["completed"])
+
+if __name__ == "__main__":
+    unittest.main()
