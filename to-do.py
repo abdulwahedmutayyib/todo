@@ -28,7 +28,7 @@ class ToDoApp:
             print("Due date must be in the future.")
             return
 
-        self.tasks.append({"name": task_name, "due_date": due_date, "completed": False})
+        self.tasks.append({"name": task_name, "due_date": due_date.strftime("%Y-%m-%d %H:%M"), "completed": False})
         print("Task added successfully!")
         self.save_data()
 
@@ -108,4 +108,11 @@ class ToDoApp:
             elif choice == 4:
                 self.remove_task()
             elif choice == 5:
-                print("Exiting
+                print("Exiting...")
+                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 5.")
+
+if __name__ == "__main__":
+    app = ToDoApp()
+    app.run()
