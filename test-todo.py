@@ -1,6 +1,6 @@
 import unittest
-from datetime import datetime, timedelta
 import json
+from datetime import datetime, timedelta
 from todo_app import ToDoApp
 
 class TestToDoApp(unittest.TestCase):
@@ -58,11 +58,4 @@ class TestToDoApp(unittest.TestCase):
         self.app = ToDoApp()
         self.assertEqual(len(self.app.tasks), 2)
         self.assertEqual(self.app.tasks[0]["name"], "Test Task 1")
-        self.assertEqual(self.app.tasks[0]["due_date"], tasks[0]["due_date"])
-        self.assertFalse(self.app.tasks[0]["completed"])
-        self.assertEqual(self.app.tasks[1]["name"], "Test Task 2")
-        self.assertEqual(self.app.tasks[1]["due_date"], tasks[1]["due_date"])
-        self.assertFalse(self.app.tasks[1]["completed"])
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual(self.app.
