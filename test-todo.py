@@ -55,7 +55,14 @@ class TestToDoApp(unittest.TestCase):
         ]
         with open("tasks.json", "w") as file:
             json.dump(tasks, file)
-        self.app = ToDoApp()
+        self.app.load_data()
         self.assertEqual(len(self.app.tasks), 2)
         self.assertEqual(self.app.tasks[0]["name"], "Test Task 1")
-        self.assertEqual(self.app.
+        self.assertEqual(self.app.tasks[0]["due_date"], tasks[0]["due_date"])
+        self.assertFalse(self.app.tasks[0]["completed"])
+        self.assertEqual(self.app.tasks[1]["name"], "Test Task 2")
+        self.assertEqual(self.app.tasks[1]["due_date"], tasks[1]["due_date"])
+        self.assertFalse(self.app.tasks[1]["completed"])
+
+if __name__ == "__main__":
+    unittest.main()
