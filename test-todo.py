@@ -1,11 +1,11 @@
 import unittest
 import json
 from datetime import datetime, timedelta
- import todo_app 
+import todo_app 
 
 class TestToDoApp(unittest.TestCase):
     def setUp(self):
-        self.app = ToDoApp()
+        self.app = todo_app.ToDoApp()
 
     def test_add_task(self):
         self.app.add_task("Test Task", datetime.now() + timedelta(days=1))
