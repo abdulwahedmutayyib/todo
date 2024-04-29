@@ -1,7 +1,7 @@
 import unittest
 import json
 from datetime import datetime, timedelta
-import todo_app 
+from todo_app import ToDoApp 
 
 class TestToDoApp(unittest.TestCase):
     def setUp(self):
