@@ -1,6 +1,6 @@
 import unittest
 import json
-from todo_app import ToDoApp  # assuming the code is in a file called todo_app.py
+from todo import ToDoApp  # assuming the code is in a file called todo_app.py
 
 class TestToDoApp(unittest.TestCase):
     def setUp(self):
