@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock, call, mock_open
 from todo import ToDoApp  # assuming the code is in a file called todo_app.py
 
 class TestToDoApp(unittest.TestCase):
@@ -59,8 +59,18 @@ class TestToDoApp(unittest.TestCase):
     @patch('json.dump')
     def test_save_data(self, mock_dump):
         self.app.tasks = [{"name": "Task 1", "due_date": "2024-06-06 12:00", "completed": False}]
-        with patch('builtins.open', mock_open()) as mock_file:
+        with patch('builtins.open', new_callable=mock_open) as mock_file:
             self.app.save_data()
             mock_dump.assert_called_once_with(self.app.tasks, mock_file())
 
-    @patch('json.load', return_value=[{"name": "Task 1", "due_date": "2024-
+    @patch('json.load', return_value=[{"name": "Task 1", "due_date": "2024-06-06 12:00", "completed": False}])
+    def test_load_data(self, mock_load):
+        with patch('builtins.open', new_callable=mock_open) as mock_file:
+            self.app.load_data()
+            self.assertEqual(len(self.app.tasks), 1)
+            self.assertEqual(self.app.tasks[0]["name"], "Task 1")
+            self.assertEqual(self.app.tasks[0]["due_date"], "2024-06-06 12:00")
+            self.assertFalse(self.app.tasks[0]["completed"])
+
+if __name__ == "__main__":
+    unittest.main()
