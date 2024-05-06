@@ -50,10 +50,11 @@ class TestToDoApp(unittest.TestCase):
             self.assertEqual(len(self.app.tasks), 0)
 
     def test_save_data(self):
-        self.app.tasks = [{"name": "Task 1", "due_date": "2024-06-06 12:00", "completed": False}]
-        with patch('json.dump') as mock_dump:
+    self.app.tasks = [{"name": "Task 1", "due_date": "2024-06-06 12:00", "completed": False}]
+    with patch('json.dump') as mock_dump:
+        with open('tasks.json', 'w') as f:
             self.app.save_data()
-            mock_dump.assert_called_once_with(self.app.tasks, MagicMock())
+            mock_dump.assert_called_once_with(self.app.tasks, f)
 
     def test_load_data(self):
         with patch('json.load', return_value=[{"name": "Task 1", "due_date": "2024-06-06 12:00", "completed": False}]):
